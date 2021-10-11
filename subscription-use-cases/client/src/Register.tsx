@@ -3,7 +3,7 @@ import './App.css';
 import { Redirect } from 'react-router-dom';
 
 const Register = () => {
-  const [email, setEmail] = useState('jenny.rosen@example.com');
+  const [email, setEmail] = useState('testmail@example.com');
   const [customer, setCustomer] = useState(null);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> | undefined = async (e) => {

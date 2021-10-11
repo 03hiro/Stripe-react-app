@@ -3,22 +3,24 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 
 type Props = {
-  prices?: Number[],
-  subscriptionData?: String,
-  subscriptionId: String | Number | null,
-  clientSecret: String | Number | null,
+  prices?: number[],
+  subscriptionData?: string,
+  subscriptionId: string | number | null,
+  clientSecret: string | number | null,
 }
 
 type PriceValue = {
-  id: String | Number | null,
-  unit_amount: String | Number | null,
-  product: String | Number | null,
+  id: string | number,
+  unit_amount: number,
+  product: {
+    name: string
+  }
 } 
 
 
 const Prices: VFC<Props & RouteComponentProps> = () => {
 // const Prices: any= () => {
-  const [prices, setPrices] = useState([]);
+  const [prices, setPrices] = useState<PriceValue[]>([]);
   const [subscriptionData, setSubscriptionData] = useState<Props | null>(null);
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const Prices: VFC<Props & RouteComponentProps> = () => {
     
   }, [])
 
-  const createSubscription = async (priceId: Number) => {
+  const createSubscription = async (priceId: string | number) => {
     const {subscriptionId, clientSecret} = await fetch('/create-subscription', {
       method: 'POST',
       headers: {
@@ -46,11 +48,11 @@ const Prices: VFC<Props & RouteComponentProps> = () => {
 
   if(subscriptionData) {
     return <Redirect to={{
-      pathname: '/subscribe',
+      pathname: '/subscribe/',
       state: subscriptionData
     }} />
   }
-  console.log(setSubscriptionData);
+  // console.log(subscriptionData);
   
 
   return (
@@ -58,9 +60,8 @@ const Prices: VFC<Props & RouteComponentProps> = () => {
       <h1>Select a plan</h1>
 
       <div className="price-list">
-        {prices.map((price: any) => {
-          //型を変えたい
-          // console.log(price);
+        {prices.map((price) => {
+          console.log(price);
           return (
             <div key={price.id}>
               <h3>{price.product.name}</h3>

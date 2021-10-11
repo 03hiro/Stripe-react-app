@@ -2,12 +2,27 @@ import React, { useState, useEffect, VFC } from 'react';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import './App.css';
 
-
-type SubscribeType = {
-  
+type subscriptionType = {
+  subscription: {
+    id: string
+    status: string
+    plan: {
+      amount: number
+    }
+    current_period_end: number
+  }
 }
 
-const AccountSubscription = ({subscription}: any) => {
+type subscriptionsType = {
+  id: string
+  status: string
+  plan: {
+    amount: number
+  }
+  current_period_end: number
+}
+
+const AccountSubscription: VFC<subscriptionType> = ({ subscription }) => {
   return (
     <section>
       <hr />
@@ -16,7 +31,7 @@ const AccountSubscription = ({subscription}: any) => {
           {`subscription.id${"(支払いページ)"}`}
         </a>
       </h4>
-      {console.log(subscription)}
+      {/* {console.log(subscription)} */}
       <p>
         Status(): {subscription.status}
       </p>
@@ -30,25 +45,26 @@ const AccountSubscription = ({subscription}: any) => {
       </p>
 
       {/* <Link to={{pathname: '/change-plan', state: {subscription: subscription.id }}}>Change plan</Link><br /> */}
-      <Link to={{pathname: '/cancel', state: {subscription: subscription.id }}}>Cancel</Link>
+      <Link to={{ pathname: '/cancel', state: { subscription: subscription.id } }}>Cancel</Link>
     </section>
   )
 }
 
-const Account: any & RouteComponentProps = () => {
-  const [subscriptions, setSubscriptions] = useState([]);
+const Account: VFC<RouteComponentProps> = () => {
+  const [subscriptions, setSubscriptions] = useState<subscriptionsType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const {subscriptions} = await fetch('/subscriptions').then(r => r.json());
+      const { subscriptions } = await fetch('/subscriptions').then(r => r.json());
 
       setSubscriptions(subscriptions.data);
+      // console.log(subscriptions.data);
     }
     fetchData();
   }, []);
-
+  
   if (!subscriptions) {
-    return '';
+    return null;
   }
 
   return (
@@ -62,8 +78,8 @@ const Account: any & RouteComponentProps = () => {
       <h2>Subscriptions</h2>
 
       <div id="subscriptions">
-        {subscriptions.map((s: any) => {
-          //型を変えたい
+        {subscriptions.map((s) => {
+          // console.log(s);
           return <AccountSubscription key={s.id} subscription={s} />
         })}
       </div>

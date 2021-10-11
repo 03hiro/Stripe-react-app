@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useState, VFC } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import './App.css';
 import { Redirect } from 'react-router-dom';
 
-const Cancel = ({location}) => {
+
+type CancelType = {
+  location: {
+    state: {
+      subscription: string
+    }
+  }
+}
+
+
+const Cancel: VFC<CancelType & RouteComponentProps> = ({location}) => {
   const [cancelled, setCancelled] = useState(false);
 
-  const handleClick = async (e) => {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> | undefined = async (e) => {
     e.preventDefault();
 
     await fetch('/cancel-subscription', {
@@ -18,7 +28,9 @@ const Cancel = ({location}) => {
         subscriptionId: location.state.subscription
       }),
     })
-
+    // console.log(location);
+    // console.log(location.state);
+    
     setCancelled(true);
   };
 
