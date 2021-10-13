@@ -2,8 +2,8 @@
 
 :root {
   --light-grey: #F6F9FC;
-  --dark-terminal-color: #0A2540;
-  --accent-color: #635BFF;
+  --dark-terminal-color: #33CCCC;
+  --accent-color: #33CCCC;
   --radius: 3px;
 }
 
@@ -18,7 +18,7 @@ body {
 
 form > * {
   margin: 10px 0;
-  color: #00D924;
+  color: #66CC99;
 }
 
 code {
@@ -34,7 +34,7 @@ code {
 .price-list > div {
   flex-grow: 3;
   margin: 0 10px;
-  border: black solid 1px;
+  border: #00CCCC solid 1px;
   padding: 20px;
 }
 

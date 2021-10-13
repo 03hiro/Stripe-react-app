@@ -27,12 +27,11 @@ type subscriptionsType = {
 
 type subscriptionType = {
   subscription: {
-    id: string
-    status: string
+    id: string | undefined
+    status: string | undefined
     plan: {
-      amount: number
+      amount: number | undefined
     }
-    current_period_end: number
   }
 }
 
@@ -45,9 +44,8 @@ type subscriptionType = {
 // }
 
 
-// const SubscribeSubscription: VFC<subscriptionType> = ({ subscription }) => {
-  const SubscribeSubscription: any = ({ subscription }: any) => {
-    console.log(subscription);
+const SubscribeSubscription: VFC<subscriptionType> = ({ subscription }) => {
+  // const SubscribeSubscription: any = ({ subscription }: any) => {
     
 
   if (subscription.plan.amount === 500) {
@@ -66,6 +64,8 @@ type subscriptionType = {
         {console.log(subscription)}
       </div>
     )
+  } else{
+    return null;
   }
 };
 
@@ -79,6 +79,7 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
     const fetchData = async () => {
       const { subscriptions } = await fetch('/subscriptions').then(r => r.json());
       setSubscriptions(subscriptions.data);
+      console.log(subscriptions.data)
       
     }
     fetchData();
@@ -133,6 +134,7 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
     // to find your CardElement because there can only ever be one of
     // each type of element.
     const cardElement = elements.getElement(CardElement);
+    
     if (!cardElement) {
       alert("カード情報の取得に失敗しました");
       return
@@ -167,10 +169,7 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
 
       <div id="subscriptions">
         {subscriptions.map((s) => {
-          
-          // if(subscriptions === undefined){
-          //   return;
-          // }          
+         
           return <SubscribeSubscription key={s.id} subscription={s} />
         })}
       </div>
@@ -201,11 +200,11 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
       </div> */}
 
       <p>
-        Try the successful test card: <span>4242424242424242</span>.
+        Try the test card(テスト用を番号)）: <span>4242424242424242</span>.
       </p>
 
       <p>
-        Try the test card that requires SCA: <span>4000002500003155</span>.
+        Try the test card that requires SCA(テスト用番号): <span>4000002500003155</span>.
       </p>
 
       <p>
