@@ -1,4 +1,4 @@
-import React, { useState, useEffect, VFC, ReactElement, memo } from 'react';
+import React, { useState, useEffect, VFC, memo } from 'react';
 import { loadStripe, StripeCardElement, StripeCardNumberElement, StripeElements } from '@stripe/stripe-js';
 import { withRouter, RouteComponentProps, useLocation, } from 'react-router-dom';
 import {
@@ -36,54 +36,67 @@ type subscriptionType = {
   }
 }
 
-type PriceValue = {
-  id: string | number,
-  unit_amount: number,
-  product: {
-    name: string
-  }
-} 
+// type PriceValue = {
+//   id: string | number,
+//   unit_amount: number,
+//   product: {
+//     name: string
+//   }
+// }
 
-const SubscribeSubscription: VFC<subscriptionType> = ({subscription}) => {
- 
-  return (
-    <div>
-      <p>Total due : <span>{`$ ${subscription.plan.amount / 100}`}</span>.</p>
-      <p>Subscribing to : <span>{}</span>.</p>
-      {console.log(subscription)}
-    </div>
-  )
-}
+
+// const SubscribeSubscription: VFC<subscriptionType> = ({ subscription }) => {
+  const SubscribeSubscription: any = ({ subscription }: any) => {
+    console.log(subscription);
+    
+
+  if (subscription.plan.amount === 500) {
+    return (
+      <div>
+        <h3>Total due : <span>{`$ ${subscription.plan.amount / 100}`}</span>.00</h3>
+        <h3>Subscribing to : <span>Basic product</span>.</h3>
+        {console.log(subscription)}
+      </div>
+    )
+  } else if (subscription.plan.amount === 1500) {
+    return (
+      <div>
+        <h3>Total due : <span>{`$ ${subscription.plan.amount / 100}`}</span>.00</h3>
+        <h3>Subscribing to : <span>Premium product</span>.</h3>
+        {console.log(subscription)}
+      </div>
+    )
+  }
+};
 
 const Subscribe: VFC<RouteComponentProps> = memo(() => {
   const [subscriptions, setSubscriptions] = useState<subscriptionsType[]>([]);
-  const [prices, setPrices] = useState<PriceValue[]>([]);
-  
-  
+  // const [prices, setPrices] = useState<PriceValue[]>([]);
+
 
   useEffect(() => {
+    //金額表示取得用
     const fetchData = async () => {
       const { subscriptions } = await fetch('/subscriptions').then(r => r.json());
       setSubscriptions(subscriptions.data);
+      
     }
     fetchData();
 
-    const fetchPrices = async () => {
-      const {prices} = await fetch('/config').then(r => r.json());
-      setPrices(prices);
-      console.log(prices);
-    };
-    fetchPrices();
+    // product表示用
+    // const fetchPrices = async () => {
+    //   const { prices } = await fetch('/config').then(r => r.json());
+    //   setPrices(prices);
+    //   // console.log(prices);
+    // };
+    // fetchPrices();
 
   }, []);
-  // if (!subscriptions) {
-  //   return null;
-  // }
-
+  if (!subscriptions) {
+    return null;
+  }
 
   const location = useLocation<LocationState>();
-
-  // const { from } = location.state || {from : {pathname: '/account'}};
 
   // Get the lookup key for the price from the previous page redirect.
   const [clientSecret] = useState(location.state.clientSecret);
@@ -135,6 +148,7 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
       }
     });
 
+
     if (error) {
       // show error and collect new card details.
       setMessage(error.message);
@@ -149,23 +163,40 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
 
   return (
     <>
-      <h1>Subscribe</h1>
-      
+      <h1>Subscribe (Card Info)</h1>
+
       <div id="subscriptions">
-      {subscriptions.map((s) => {
+        {subscriptions.map((s) => {
+          
+          // if(subscriptions === undefined){
+          //   return;
+          // }          
           return <SubscribeSubscription key={s.id} subscription={s} />
         })}
       </div>
 
+
+
       {/* <div>
         {prices.map((price) => {
-          // console.log(price)
-          return (
-            <div key={price.id}>
-              <h3>Subscribing to: {price.product.name}</h3>
-              <p>Total due: ${price.unit_amount / 100} / month</p>
-            </div>
-          )
+          subscriptions.map((s) => {
+            
+            if(s.plan.amount === 500) {
+              return (
+                <>
+                  <div key={s.id}>
+                    <p>.{console.log(s.plan.amount)}</p>
+                  </div>
+  
+                  <div key={price.id}>
+                    
+                    <h3>Subscribing to: {console.log(price.product.name)}</h3>
+                  </div>
+                </>
+              )
+            }
+
+          })
         })}
       </div> */}
 
@@ -186,7 +217,7 @@ const Subscribe: VFC<RouteComponentProps> = memo(() => {
       <form onSubmit={handleSubmit}>
         <label>
           Full name
-          <input type="text" id="name" placeholder="名前を入力してください" value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" id="name" placeholder="Card Name" value={name} onChange={(e) => setName(e.target.value)} />
         </label>
 
         <CardElement />

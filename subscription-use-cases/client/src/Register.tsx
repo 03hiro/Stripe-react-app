@@ -27,7 +27,7 @@ const Register = () => {
 
   return (
     <main>
-      <h1>Sample Photo Service</h1>
+      <h1>Mail Info</h1>
 
       <img src="https://picsum.photos/280/320?random=4" alt="picsum generated" width="140" height="160" />
 

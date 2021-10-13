@@ -61,7 +61,7 @@ const Prices: VFC<Props & RouteComponentProps> = () => {
 
       <div className="price-list">
         {prices.map((price) => {
-          console.log(price);
+          // console.log(price);
           return (
             <div key={price.id}>
               <h3>{price.product.name}</h3>
